@@ -1,7 +1,7 @@
 LANG := C
 OUTPUT := gb
 LIBS :=
-FLAGS := -g
+FLAGS := -g -Wall
 
 INCLUDE_DIR:= -I deps/*/include -I include
 LIB_DIR:= -L deps/*/lib

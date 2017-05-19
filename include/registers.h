@@ -1,11 +1,15 @@
 #pragma once
 /*
- * Emulator for stripped down Z80 inside GameBoy
+ * Registers used by the stripped down Z89 inside the GameBoy
  */
 
 #include <stdbool.h>
-
 #include "types.h"
+
+#define ZERO_FLAG (1 << 6)
+#define SUBTRACT_FLAG (1 << 5)
+#define HALF_CARRY_FLAG (1 << 4)
+#define CARRY_FLAG (1 << 3)
 
 typedef struct {
     // Registers
@@ -41,6 +45,6 @@ typedef struct {
         };
     };
 
-    u8 sp;
-    u8 pc;
+    u16 sp;
+    u16 pc;
 } Registers;
