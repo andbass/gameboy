@@ -709,9 +709,12 @@ u8 execute(GameBoy* gb) {
             return 16;
         case 0x04: // CALL NZ, nn
             return 12;
+        case 0x05: // PUSH BC
+            push_u16(gb, gb->reg.bc);
+            return 16;
+        case 0x06: // ADD A, n
+            add_u8(gb, &gb->reg.a, next_u8(gb));
         }
-
-
         break;
     case 0xD0:
         switch (opcode & 0x0F) {

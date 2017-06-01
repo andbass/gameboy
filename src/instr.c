@@ -126,7 +126,6 @@ void rotate_right_carry(GameBoy* gb, u8* dest) {
 }
 
 void relative_jump(GameBoy* gb, i8 offset) {
-    gb->reg.pc--; // Turn `pc` back to the current instruction, as its incremented in the beginning of `execute`
     gb->reg.pc += offset;
 }
 
