@@ -688,8 +688,11 @@ u8 execute(GameBoy* gb) {
     case 0xC0:
         switch (opcode & 0x0F) {
         case 0x00: // RET NZ
-            return 8;
+            if (!(gb->reg.f & ZERO_FLAG)) {
+                return 20;
+            }
 
+            return 8;
         }
         break;
     case 0xD0:

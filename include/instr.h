@@ -64,3 +64,7 @@ void pop_u16(GameBoy*, u16* dest);
 
 // Handles PUSH
 void push_u16(GameBoy*, u16 val);
+
+// Handles RET
+void ret(GameBoy*);
+
