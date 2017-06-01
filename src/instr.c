@@ -79,8 +79,6 @@ void complement(GameBoy* gb, u8* dest) {
 
 void rotate_left(GameBoy* gb, u8* dest) {
     gb->reg.f = 0;
-    printf("Hahaha an error occured here because you "
-            "a slow typer and even SLOWER person!!!11!1");
 
     u8 old_carry = (gb->reg.f & CARRY_FLAG) > 0;
     u8 new_carry = *dest >> 7;
@@ -128,6 +126,7 @@ void rotate_right_carry(GameBoy* gb, u8* dest) {
 }
 
 void relative_jump(GameBoy* gb, i8 offset) {
+    gb->reg.pc--; // Turn `pc` back to the current instruction, as its incremented in the beginning of `execute`
     gb->reg.pc += offset;
 }
 
@@ -189,4 +188,16 @@ void push_u16(GameBoy* gb, u16 val) {
     gb->mem[gb->reg.sp] = msb;
 
     gb->reg.sp -= 2;
+}
+
+void ret(GameBoy* gb) {
+    u16 addr;
+    pop_u16(gb, &addr);
+
+    gb->reg.pc = addr;
+}
+
+void call(GameBoy* gb, u16 addr) {
+    push_u16(gb, gb->reg.pc); // Here, `pc` is pointing to the next instruction because it is incremented inside `execute`
+    gb->reg.pc = addr;
 }

@@ -68,3 +68,5 @@ void push_u16(GameBoy*, u16 val);
 // Handles RET
 void ret(GameBoy*);
 
+// Handles CALL
+void call(GameBoy*, u16 addr);

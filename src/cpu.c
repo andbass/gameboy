@@ -42,10 +42,10 @@ u16 next_u16(GameBoy* gb) {
 }
 
 // Opcodes come from: http://www.pastraiser.com/cpu/gameboy/gameboy_opcodes.html
-// nn -> next word (2 bytes)
+// nn -> next 2 byte number
 // n -> next byte
 // s -> next signed byte
-// ss -> next signed word
+// ss -> next signed 2 byte number
 u8 execute(GameBoy* gb) {
     u8 opcode = next_u8(gb);
 
@@ -689,11 +689,29 @@ u8 execute(GameBoy* gb) {
         switch (opcode & 0x0F) {
         case 0x00: // RET NZ
             if (!(gb->reg.f & ZERO_FLAG)) {
+                ret(gb);
                 return 20;
             }
 
             return 8;
+        case 0x01: // POP BC
+            pop_u16(gb, &gb->reg.bc);
+            return 12;
+        case 0x02: // JP NZ, nn
+            if (!(gb->reg.f & ZERO_FLAG)) {
+                gb->reg.pc = next_u16(gb);
+                return 16;
+            }
+
+            return 12;
+        case 0x03: // JP nn
+            gb->reg.pc = next_u16(gb);
+            return 16;
+        case 0x04: // CALL NZ, nn
+            return 12;
         }
+
+
         break;
     case 0xD0:
         switch (opcode & 0x0F) {
