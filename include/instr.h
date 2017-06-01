@@ -1,6 +1,6 @@
 #pragma once
 /*
- * Generic definitions for all of the GameBoy's opcodes
+ * Generic definitions for the various functionalities of the GameBoy's opcodes
  * Also provides utility functions for dealing with flags
  *
  * Opcode functions are used by `execute` in "cpu.h"
@@ -59,4 +59,8 @@ void xor_u8(GameBoy*, u8* dest, u8 val);
 // Handles CP
 void cp_u8(GameBoy*, u8 val1, u8 val2);
 
+// Handles POP, RET
+void pop_u16(GameBoy*, u16* dest);
 
+// Handles PUSH
+void push_u16(GameBoy*, u16 val);

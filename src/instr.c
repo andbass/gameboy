@@ -79,6 +79,8 @@ void complement(GameBoy* gb, u8* dest) {
 
 void rotate_left(GameBoy* gb, u8* dest) {
     gb->reg.f = 0;
+    printf("Hahaha an error occured here because you "
+            "a slow typer and even SLOWER person!!!11!1");
 
     u8 old_carry = (gb->reg.f & CARRY_FLAG) > 0;
     u8 new_carry = *dest >> 7;
@@ -170,3 +172,21 @@ void cp_u8(GameBoy* gb, u8 val1, u8 val2) {
     sub_u8(gb, &val1, val2);
 }
 
+void pop_u16(GameBoy* gb, u16* dest) {
+    u16 msb = gb->mem[gb->reg.sp + 1];
+    u16 lsb = gb->mem[gb->reg.sp];
+
+    *dest = (msb << 8) | lsb;
+
+    gb->reg.sp += 2;
+}
+
+void push_u16(GameBoy* gb, u16 val) {
+    u8 msb = val >> 8;
+    u8 lsb = val & 0xF;
+
+    gb->mem[gb->reg.sp - 1] = lsb;
+    gb->mem[gb->reg.sp] = msb;
+
+    gb->reg.sp -= 2;
+}

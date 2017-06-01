@@ -27,16 +27,16 @@ void cpu_info(GameBoy* gb, FILE* fp) {
     fprintf(fp, "\tPC = 0x%x\n", gb->reg.pc);
 }
 
-u8 next_byte(GameBoy* gb) {
+u8 next_u8(GameBoy* gb) {
     u8 byte = gb->mem[gb->reg.pc];
     gb->reg.pc++;
 
     return byte;
 }
 
-u16 next_word(GameBoy* gb) {
-    u8 lo = next_byte(gb);
-    u8 hi = next_byte(gb);
+u16 next_u16(GameBoy* gb) {
+    u8 lo = next_u8(gb);
+    u8 hi = next_u8(gb);
 
     return ((u16)hi << 8) | (u16)lo;
 }
@@ -47,7 +47,7 @@ u16 next_word(GameBoy* gb) {
 // s -> next signed byte
 // ss -> next signed word
 u8 execute(GameBoy* gb) {
-    u8 opcode = next_byte(gb);
+    u8 opcode = next_u8(gb);
 
     switch (opcode & 0xF0) {
     case 0x00:
@@ -55,7 +55,7 @@ u8 execute(GameBoy* gb) {
         case 0x00: // NOP
             return 4;
         case 0x01: // LD BC, nn
-            gb->reg.bc = next_word(gb);
+            gb->reg.bc = next_u16(gb);
             return 12;
         case 0x02: // LD (BC), A
             gb->mem[gb->reg.bc] = gb->reg.a;
@@ -70,13 +70,13 @@ u8 execute(GameBoy* gb) {
             sub_u8(gb, &gb->reg.b, 1);
             return 4;
         case 0x06: // LD B, n
-            gb->reg.b = next_byte(gb);
+            gb->reg.b = next_u8(gb);
             return 4;
         case 0x07: // RLCA
             rotate_left_carry(gb, &gb->reg.a);
             return 4;
         case 0x08: // LD (nn), SP
-            gb->mem[next_byte(gb)] = gb->reg.sp;
+            gb->mem[next_u8(gb)] = gb->reg.sp;
             return 4;
         case 0x09: // ADD HL, BC
             add_u16(gb, &gb->reg.hl, gb->reg.bc);
@@ -94,7 +94,7 @@ u8 execute(GameBoy* gb) {
             sub_u8(gb, &gb->reg.c, 1);
             return 4;
         case 0x0E: // LD C, n
-            gb->reg.c = next_byte(gb);
+            gb->reg.c = next_u8(gb);
             return 8;
         case 0x0F: // RRCA
             rotate_right_carry(gb, &gb->reg.a);
@@ -107,7 +107,7 @@ u8 execute(GameBoy* gb) {
             // TODO do this
             return 4;
         case 0x01: // LD DE, d16
-            gb->reg.de = next_word(gb);
+            gb->reg.de = next_u16(gb);
             return 12;
         case 0x02: // LD (DE), A
             gb->mem[gb->reg.de] = gb->reg.a;
@@ -122,13 +122,13 @@ u8 execute(GameBoy* gb) {
             sub_u8(gb, &gb->reg.d, 1);
             return 4;
         case 0x06: // LD D, n
-            gb->reg.d = next_byte(gb);
+            gb->reg.d = next_u8(gb);
             return 8;
         case 0x07: // RLA
             rotate_left(gb, &gb->reg.a);
             return 4;
         case 0x08: // JR s
-            relative_jump(gb, next_byte(gb));
+            relative_jump(gb, next_u8(gb));
             return 12;
         case 0x09: // ADD HL, DE
             add_u16(gb, &gb->reg.hl, gb->reg.de);
@@ -146,7 +146,7 @@ u8 execute(GameBoy* gb) {
             sub_u8(gb, &gb->reg.e, 1);
             return 4;
         case 0x0E: // LD E, n
-            gb->reg.e = next_byte(gb);
+            gb->reg.e = next_u8(gb);
             return 8;
         case 0x0F: // RRA
             rotate_right(gb, &gb->reg.a);
@@ -157,13 +157,13 @@ u8 execute(GameBoy* gb) {
         switch (opcode & 0x0F) {
         case 0x00: // JR NZ, s
             if (!(gb->reg.f & ZERO_FLAG)) {
-                relative_jump(gb, next_byte(gb));
+                relative_jump(gb, next_u8(gb));
                 return 12;
             }
 
             return 8;
         case 0x01: // LD HL, nn
-            gb->reg.hl = next_word(gb);
+            gb->reg.hl = next_u16(gb);
             return 12;
         case 0x02: // LD (HL+), A
             gb->mem[gb->reg.hl] = gb->reg.a;
@@ -179,14 +179,14 @@ u8 execute(GameBoy* gb) {
             sub_u8(gb, &gb->reg.h, 1);
             return 4;
         case 0x06: // LD H, n
-            gb->reg.h = next_byte(gb);
+            gb->reg.h = next_u8(gb);
             return 8;
         case 0x07: // DAA
             decimal_adjust(gb, &gb->reg.a);
             return 4;
         case 0x08: // JR Z, s
             if (gb->reg.f & ZERO_FLAG) {
-                relative_jump(gb, next_byte(gb));
+                relative_jump(gb, next_u8(gb));
                 return 12;
             }
 
@@ -207,7 +207,7 @@ u8 execute(GameBoy* gb) {
             sub_u8(gb, &gb->reg.l, 1);
             return 4;
         case 0x0E: // LD L, n
-            gb->reg.l = next_byte(gb);
+            gb->reg.l = next_u8(gb);
             return 8;
         case 0x0F: // CPL
             complement(gb, &gb->reg.a);
@@ -218,13 +218,13 @@ u8 execute(GameBoy* gb) {
         switch (opcode & 0x0F) {
         case 0x00: // JR NC, r
             if (!(gb->reg.f & CARRY_FLAG)) {
-                relative_jump(gb, next_byte(gb));
+                relative_jump(gb, next_u8(gb));
                 return 12;
             }
 
             return 8;
         case 0x01: // LD (SP), nn
-            gb->reg.sp = next_word(gb);
+            gb->reg.sp = next_u16(gb);
             return 12;
         case 0x02: // LD (HL-), A
             gb->mem[gb->reg.hl] = gb->reg.a;
@@ -240,14 +240,14 @@ u8 execute(GameBoy* gb) {
             gb->mem[gb->reg.hl]--;
             return 12;
         case 0x06: // LD (HL), n
-            gb->mem[gb->reg.hl] = next_byte(gb);
+            gb->mem[gb->reg.hl] = next_u8(gb);
             return 12;
         case 0x07: // SCF
             gb->reg.f |= CARRY_FLAG;
             return 0;
         case 0x08: // JR C, r
             if (gb->reg.f & CARRY_FLAG) {
-                relative_jump(gb, next_byte(gb));
+                relative_jump(gb, next_u8(gb));
                 return 12;
             }
 
@@ -269,7 +269,7 @@ u8 execute(GameBoy* gb) {
             gb->reg.a--;
             return 4;
         case 0x0E: // LD A, n
-            gb->reg.a = next_byte(gb);
+            gb->reg.a = next_u8(gb);
             return 8;
         case 0x0F: // CCF
             gb->reg.f ^= CARRY_FLAG;
@@ -687,6 +687,8 @@ u8 execute(GameBoy* gb) {
         break;
     case 0xC0:
         switch (opcode & 0x0F) {
+        case 0x00: // RET NZ
+            return 8;
 
         }
         break;
