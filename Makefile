@@ -58,7 +58,7 @@ endif
 
 clean :
 	@rm -r obj/*
-	@rm $(shell find . -name $(OUTPUT)*)
+	@rm ./$(OUTPUT)
 
 debug :
 	@echo Language Selected: $(LANG)
