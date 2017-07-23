@@ -57,11 +57,13 @@ void sub_u8(GameBoy* gb, u8* dest, u8 val) {
 }
 
 void add_with_carry_u8(GameBoy* gb, u8* dest, u8 val) {
-    add_u8(gb, dest, val + (gb->reg.f & CARRY_FLAG));
+    u8 carry = (gb->reg.f & CARRY_FLAG) > 0;
+    add_u8(gb, dest, val + carry);
 }
 
 void sub_with_carry_u8(GameBoy* gb, u8* dest, u8 val) {
-    sub_u8(gb, dest, val - (gb->reg.f & CARRY_FLAG));
+    u8 carry = (gb->reg.f & CARRY_FLAG) > 0;
+    sub_u8(gb, dest, val - carry);
 }
 
 void add_u16(GameBoy* gb, u16* dest, u16 val) {
@@ -239,6 +241,10 @@ void test_bit(GameBoy*, u8* dest, u8 bit) {
 
     u8 mask = 1 << bit;
     zero_check(gb, mask);
+}
+
+void reset_bit(GameBoy*, u8* dest, u8 bit) {
+    *dest &= ~(1 << bit);
 }
 
 void call(GameBoy* gb, u16 addr) {
