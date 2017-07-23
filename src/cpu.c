@@ -708,6 +708,11 @@ u8 execute(GameBoy* gb) {
             gb->reg.pc = next_u16(gb);
             return 16;
         case 0x04: // CALL NZ, nn
+            if (!(gb->reg.f & ZERO_FLAG)) {
+                call(gb, next_u16(gb));
+                return 24;
+            }
+
             return 12;
         case 0x05: // PUSH BC
             push_u16(gb, gb->reg.bc);
@@ -736,6 +741,16 @@ u8 execute(GameBoy* gb) {
             return 12;
         case 0x0B: // Prefix byte
             return execute_cb_prefixed_opcode(gb);
+        case 0x0C: // CALL Z, nn
+            if (gb->reg.f & ZERO_FLAG) {
+                call(gb, next_u16(gb));
+                return 24;
+            }
+
+            return 12;
+        case 0x0D: // CALL nn
+            call(gb, next_u16(gb));
+            return 24;
         }
         break;
     case 0xD0:

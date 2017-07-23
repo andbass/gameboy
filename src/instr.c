@@ -235,19 +235,19 @@ void swap(GameBoy* gb, u8* dest) {
     zero_check(gb, *dest);
 }
 
-void test_bit(GameBoy*, u8* dest, u8 bit) {
-    gb->reg.f |= HALF_CARRY;
+void test_bit(GameBoy* gb, u8* dest, u8 bit) {
+    gb->reg.f |= HALF_CARRY_FLAG;
     gb->reg.f &= ~SUBTRACT_FLAG;
 
     u8 mask = 1 << bit;
     zero_check(gb, mask);
 }
 
-void reset_bit(GameBoy*, u8* dest, u8 bit) {
+void reset_bit(GameBoy* gb, u8* dest, u8 bit) {
     *dest &= ~(1 << bit);
 }
 
-void set_bit(GameBoy*, u8* dest, u8 bit) {
+void set_bit(GameBoy* gb, u8* dest, u8 bit) {
     *dest |= (1 << bit);
 }
 
