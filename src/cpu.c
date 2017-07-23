@@ -1332,6 +1332,198 @@ u8 execute_cb_prefixed_opcode(GameBoy* gb) {
     case 0xBF: // RES 7, A
         reset_bit(gb, &gb->reg.a, 7);
         return 8;
+    case 0xC0: // SET 0, B
+        set_bit(gb, &gb->reg.b, 0);
+        return 8;
+    case 0xC1: // SET 0, C
+        set_bit(gb, &gb->reg.c, 0);
+        return 8;
+    case 0xC2: // SET 0, D
+        set_bit(gb, &gb->reg.d, 0);
+        return 8;
+    case 0xC3: // SET 0, E
+        set_bit(gb, &gb->reg.e, 0);
+        return 8;
+    case 0xC4: // SET 0, H
+        set_bit(gb, &gb->reg.h, 0);
+        return 8;
+    case 0xC5: // SET 0, L
+        set_bit(gb, &gb->reg.l, 0);
+        return 8;
+    case 0xC6: // SET 0, (HL)
+        set_bit(gb, &gb->mem[gb->reg.hl], 0);
+        return 8;
+    case 0xC7: // SET 0, A
+        set_bit(gb, &gb->reg.a, 0);
+        return 8;
+    case 0xC8: // SET 1, B
+        set_bit(gb, &gb->reg.b, 1);
+        return 8;
+    case 0xC9: // SET 1, C
+        set_bit(gb, &gb->reg.c, 1);
+        return 8;
+    case 0xCA: // SET 1, D
+        set_bit(gb, &gb->reg.d, 1);
+        return 8;
+    case 0xCB: // SET 1, E
+        set_bit(gb, &gb->reg.e, 1);
+        return 8;
+    case 0xCC: // SET 1, H
+        set_bit(gb, &gb->reg.h, 1);
+        return 8;
+    case 0xCD: // SET 1, L
+        set_bit(gb, &gb->reg.l, 1);
+        return 8;
+    case 0xCE: // SET 1, (HL)
+        set_bit(gb, &gb->mem[gb->reg.hl], 1);
+        return 16;
+    case 0xCF: // SET 1, A
+        set_bit(gb, &gb->reg.a, 1);
+        return 8;
+    case 0xD0: // SET 2, B
+        set_bit(gb, &gb->reg.b, 2);
+        return 8;
+    case 0xD1: // SET 2, C
+        set_bit(gb, &gb->reg.c, 2);
+        return 8;
+    case 0xD2: // SET 2, D
+        set_bit(gb, &gb->reg.d, 2);
+        return 8;
+    case 0xD3: // SET 2, E
+        set_bit(gb, &gb->reg.e, 2);
+        return 8;
+    case 0xD4: // SET 2, H
+        set_bit(gb, &gb->reg.h, 2);
+        return 8;
+    case 0xD5: // SET 2, L
+        set_bit(gb, &gb->reg.l, 2);
+        return 8;
+    case 0xD6: // SET 2, (HL)
+        set_bit(gb, &gb->mem[gb->reg.hl], 2);
+        return 16;
+    case 0xD7: // SET 2, A
+        set_bit(gb, &gb->reg.a, 2);
+        return 8;
+    case 0xD8: // SET 3, B
+        set_bit(gb, &gb->reg.b, 3);
+        return 8;
+    case 0xD9: // SET 3, C
+        set_bit(gb, &gb->reg.c, 3);
+        return 8;
+    case 0xDA: // SET 3, D
+        set_bit(gb, &gb->reg.d, 3);
+        return 8;
+    case 0xDB: // SET 3, E
+        set_bit(gb, &gb->reg.e, 3);
+        return 8;
+    case 0xDC: // SET 3, H
+        set_bit(gb, &gb->reg.h, 3);
+        return 8;
+    case 0xDD: // SET 3, L
+        set_bit(gb, &gb->reg.l, 3);
+        return 8;
+    case 0xDE: // SET 3, (HL)
+        set_bit(gb, &gb->mem[gb->reg.hl], 3);
+        return 16;
+    case 0xDF: // SET 3, A
+        set_bit(gb, &gb->reg.a, 3);
+        return 8;
+    case 0xE0: // SET 4, B
+        set_bit(gb, &gb->reg.b, 4);
+        return 8;
+    case 0xE1: // SET 4, C
+        set_bit(gb, &gb->reg.c, 4);
+        return 8;
+    case 0xE2: // SET 4, D
+        set_bit(gb, &gb->reg.d, 4);
+        return 8;
+    case 0xE3: // SET 4, E
+        set_bit(gb, &gb->reg.e, 4);
+        return 8;
+    case 0xE4: // SET 4, H
+        set_bit(gb, &gb->reg.h, 4);
+        return 8;
+    case 0xE5: // SET 4, L
+        set_bit(gb, &gb->reg.l, 4);
+        return 8;
+    case 0xE6: // SET 4, (HL)
+        set_bit(gb, &gb->mem[gb->reg.hl], 4);
+        return 16;
+    case 0xE7: // SET 4, A
+        set_bit(gb, &gb->reg.a, 4);
+        return 8;
+    case 0xE8: // SET 5, B
+        set_bit(gb, &gb->reg.b, 5);
+        return 8;
+    case 0xE9: // SET 5, C
+        set_bit(gb, &gb->reg.c, 5);
+        return 8;
+    case 0xEA: // SET 5, D
+        set_bit(gb, &gb->reg.d, 5);
+        return 8;
+    case 0xEB: // SET 5, E
+        set_bit(gb, &gb->reg.e, 5);
+        return 8;
+    case 0xEC: // SET 5, H
+        set_bit(gb, &gb->reg.h, 5);
+        return 8;
+    case 0xED: // SET 5, L
+        set_bit(gb, &gb->reg.l, 5);
+        return 8;
+    case 0xEE: // SET 5, (HL)
+        set_bit(gb, &gb->mem[gb->reg.hl], 5);
+        return 16;
+    case 0xEF: // SET 5, A
+        set_bit(gb, &gb->reg.a, 5);
+        return 8;
+    case 0xF0: // SET 6, B
+        set_bit(gb, &gb->reg.b, 6);
+        return 8;
+    case 0xF1: // SET 6, C
+        set_bit(gb, &gb->reg.c, 6);
+        return 8;
+    case 0xF2: // SET 6, D
+        set_bit(gb, &gb->reg.d, 6);
+        return 8;
+    case 0xF3: // SET 6, E
+        set_bit(gb, &gb->reg.e, 6);
+        return 8;
+    case 0xF4: // SET 6, H
+        set_bit(gb, &gb->reg.h, 6);
+        return 8;
+    case 0xF5: // SET 6, L
+        set_bit(gb, &gb->reg.l, 6);
+        return 8;
+    case 0xF6: // SET 6, (HL)
+        set_bit(gb, &gb->mem[gb->reg.hl], 6);
+        return 16;
+    case 0xF7: // SET 6, A
+        set_bit(gb, &gb->reg.a, 6);
+        return 8;
+    case 0xF8: // SET 7, B
+        set_bit(gb, &gb->reg.b, 7);
+        return 8;
+    case 0xF9: // SET 7, C
+        set_bit(gb, &gb->reg.c, 7);
+        return 8;
+    case 0xFA: // SET 7, D
+        set_bit(gb, &gb->reg.d, 7);
+        return 8;
+    case 0xFB: // SET 7, E
+        set_bit(gb, &gb->reg.e, 7);
+        return 8;
+    case 0xFC: // SET 7, H
+        set_bit(gb, &gb->reg.h, 7);
+        return 8;
+    case 0xFD: // SET 7, L
+        set_bit(gb, &gb->reg.l, 7);
+        return 8;
+    case 0xFE: // SET 7, (HL)
+        set_bit(gb, &gb->mem[gb->reg.hl], 7);
+        return 16;
+    case 0xFF: // SET 7, A
+        set_bit(gb, &gb->reg.a, 7);
+        return 8;
     }
 
     return 0;

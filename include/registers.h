@@ -3,7 +3,6 @@
  * Registers used by the stripped down Z80 inside the GameBoy
  */
 
-#include <stdbool.h>
 #include "types.h"
 
 #define ZERO_FLAG (1 << 7)
@@ -11,8 +10,8 @@
 #define HALF_CARRY_FLAG (1 << 5)
 #define CARRY_FLAG (1 << 4)
 
+// Registers
 typedef struct {
-    // Registers
     union {
         u16 af;
         struct {
