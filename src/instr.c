@@ -247,6 +247,10 @@ void reset_bit(GameBoy*, u8* dest, u8 bit) {
     *dest &= ~(1 << bit);
 }
 
+void set_bit(GameBoy*, u8* dest, u8 bit) {
+    *dest |= (1 << bit);
+}
+
 void call(GameBoy* gb, u16 addr) {
     push_u16(gb, gb->reg.pc); // Here, `pc` is pointing to the next instruction because it is incremented inside `execute`
     gb->reg.pc = addr;

@@ -1143,7 +1143,195 @@ u8 execute_cb_prefixed_opcode(GameBoy* gb) {
     case 0x7F: // BIT 7, A
         test_bit(gb, &gb->reg.a, 7);
         return 8;
-
+    case 0x80: // RES 0, B
+        reset_bit(gb, &gb->reg.b, 0);
+        return 8;
+    case 0x81: // RES 0, C
+        reset_bit(gb, &gb->reg.c, 0);
+        return 8;
+    case 0x82: // RES 0, D
+        reset_bit(gb, &gb->reg.d, 0);
+        return 8;
+    case 0x83: // RES 0, E
+        reset_bit(gb, &gb->reg.e, 0);
+        return 8;
+    case 0x84: // RES 0, H
+        reset_bit(gb, &gb->reg.h, 0);
+        return 8;
+    case 0x85: // RES 0, L
+        reset_bit(gb, &gb->reg.l, 0);
+        return 8;
+    case 0x86: // RES 0, (HL)
+        reset_bit(gb, &gb->mem[gb->reg.hl], 0);
+        return 16;
+    case 0x87: // RES 0, A
+        reset_bit(gb, &gb->reg.a, 0);
+        return 8;
+    case 0x88: // RES 1, B
+        reset_bit(gb, &gb->reg.b, 1);
+        return 8;
+    case 0x89: // RES 1, C
+        reset_bit(gb, &gb->reg.c, 1);
+        return 8;
+    case 0x8A: // RES 1, D
+        reset_bit(gb, &gb->reg.d, 1);
+        return 8;
+    case 0x8B: // RES 1, E
+        reset_bit(gb, &gb->reg.e, 1);
+        return 8;
+    case 0x8C: // RES 1, H
+        reset_bit(gb, &gb->reg.h, 1);
+        return 8;
+    case 0x8D: // RES 1, (HL)
+        reset_bit(gb, &gb->mem[gb->reg.hl], 1);
+        return 16;
+    case 0x8F: // RES 1, A
+        reset_bit(gb, &gb->reg.a, 1);
+        return 8;
+    case 0x90: // RES 2, B
+        reset_bit(gb, &gb->reg.b, 2);
+        return 8;
+    case 0x91: // RES 2, C
+        reset_bit(gb, &gb->reg.c, 2);
+        return 8;
+    case 0x92: // RES 2, D
+        reset_bit(gb, &gb->reg.d, 2);
+        return 8;
+    case 0x93: // RES 2, E
+        reset_bit(gb, &gb->reg.e, 2);
+        return 8;
+    case 0x94: // RES 2, H
+        reset_bit(gb, &gb->reg.h, 2);
+        return 8;
+    case 0x95: // RES 2, L
+        reset_bit(gb, &gb->reg.l, 2);
+        return 8;
+    case 0x96: // RES 2, (HL)
+        reset_bit(gb, &gb->mem[gb->reg.hl], 2);
+        return 16;
+    case 0x97: // RES 2, A
+        reset_bit(gb, &gb->reg.a, 2);
+        return 8;
+    case 0x98: // RES 3, B
+        reset_bit(gb, &gb->reg.b, 3);
+        return 8;
+    case 0x99: // RES 3, C
+        reset_bit(gb, &gb->reg.c, 3);
+        return 8;
+    case 0x9A: // RES 3, D
+        reset_bit(gb, &gb->reg.d, 3);
+        return 8;
+    case 0x9B: // RES 3, E
+        reset_bit(gb, &gb->reg.e, 3);
+        return 8;
+    case 0x9C: // RES 3, H
+        reset_bit(gb, &gb->reg.h, 3);
+        return 8;
+    case 0x9D: // RES 3, L
+        reset_bit(gb, &gb->reg.l, 3);
+        return 8;
+    case 0x9E: // RES 3, (HL)
+        reset_bit(gb, &gb->mem[gb->reg.hl], 3);
+        return 16;
+    case 0x9F: // RES 3, A
+        reset_bit(gb, &gb->reg.a, 3);
+        return 8;
+    case 0xA0: // RES 4, B
+        reset_bit(gb, &gb->reg.b, 4);
+        return 8;
+    case 0xA1: // RES 4, C
+        reset_bit(gb, &gb->reg.c, 4);
+        return 8;
+    case 0xA2: // RES 4, D
+        reset_bit(gb, &gb->reg.d, 4);
+        return 8;
+    case 0xA3: // RES 4, E
+        reset_bit(gb, &gb->reg.e, 4);
+        return 8;
+    case 0xA4: // RES 4, H
+        reset_bit(gb, &gb->reg.h, 4);
+        return 8;
+    case 0xA5: // RES 4, L
+        reset_bit(gb, &gb->reg.l, 4);
+        return 8;
+    case 0xA6: // RES 4, (HL)
+        reset_bit(gb, &gb->mem[gb->reg.hl], 4);
+        return 16;
+    case 0xA7: // RES 4, A
+        reset_bit(gb, &gb->reg.a, 4);
+        return 8;
+    case 0xA8: // RES 5, B
+        reset_bit(gb, &gb->reg.b, 5);
+        return 8;
+    case 0xA9: // RES 5, C
+        reset_bit(gb, &gb->reg.c, 5);
+        return 8;
+    case 0xAA: // RES 5, D
+        reset_bit(gb, &gb->reg.d, 5);
+        return 8;
+    case 0xAB: // RES 5, E
+        reset_bit(gb, &gb->reg.e, 5);
+        return 8;
+    case 0xAC: // RES 5, H
+        reset_bit(gb, &gb->reg.h, 5);
+        return 8;
+    case 0xAD: // RES 5, L
+        reset_bit(gb, &gb->reg.l, 5);
+        return 8;
+    case 0xAE: // RES 5, (HL)
+        reset_bit(gb, &gb->mem[gb->reg.hl], 5);
+        return 16;
+    case 0xAF: // RES 5, A
+        reset_bit(gb, &gb->reg.a, 5);
+        return 8;
+    case 0xB0: // RES 6, B
+        reset_bit(gb, &gb->reg.b, 6);
+        return 8;
+    case 0xB1: // RES 6, C
+        reset_bit(gb, &gb->reg.c, 6);
+        return 8;
+    case 0xB2: // RES 6, D
+        reset_bit(gb, &gb->reg.d, 6);
+        return 8;
+    case 0xB3: // RES 6, E
+        reset_bit(gb, &gb->reg.e, 6);
+        return 8;
+    case 0xB4: // RES 6, H
+        reset_bit(gb, &gb->reg.h, 6);
+        return 8;
+    case 0xB5: // RES 6, L
+        reset_bit(gb, &gb->reg.l, 6);
+        return 8;
+    case 0xB6: // RES 6, (HL)
+        reset_bit(gb, &gb->mem[gb->reg.hl], 6);
+        return 16;
+    case 0xB7: // RES 6, A
+        reset_bit(gb, &gb->reg.a, 6);
+        return 8;
+    case 0xB8: // RES 7, B
+        reset_bit(gb, &gb->reg.b, 7);
+        return 8;
+    case 0xB9: // RES 7, C
+        reset_bit(gb, &gb->reg.c, 7);
+        return 8;
+    case 0xBA: // RES 7, D
+        reset_bit(gb, &gb->reg.d, 7);
+        return 8;
+    case 0xBB: // RES 7, E
+        reset_bit(gb, &gb->reg.e, 7);
+        return 8;
+    case 0xBC: // RES 7, H
+        reset_bit(gb, &gb->reg.h, 7);
+        return 8;
+    case 0xBD: // RES 7, L
+        reset_bit(gb, &gb->reg.l, 7);
+        return 8;
+    case 0xBE: // RES 7, (HL)
+        reset_bit(gb, &gb->mem[gb->reg.hl], 7);
+        return 16;
+    case 0xBF: // RES 7, A
+        reset_bit(gb, &gb->reg.a, 7);
+        return 8;
     }
 
     return 0;

@@ -80,6 +80,12 @@ void swap(GameBoy*, u8* dest);
 // Handles BIT
 void test_bit(GameBoy*, u8* dest, u8 bit);
 
+// Handles RES
+void reset_bit(GameBoy*, u8* dest, u8 bit);
+
+// Handles SET
+void set_bit(GameBoy*, u8* dest, u8 bit);
+
 // Handles CALL
 void call(GameBoy*, u16 addr);
 
