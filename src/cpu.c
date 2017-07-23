@@ -714,6 +714,28 @@ u8 execute(GameBoy* gb) {
             return 16;
         case 0x06: // ADD A, n
             add_u8(gb, &gb->reg.a, next_u8(gb));
+            return 8;
+        case 0x07: // RST 00h
+            restart(gb, 0x0);
+            return 16;
+        case 0x08: // RET Z
+            if (gb->reg.f & ZERO_FLAG) {
+                ret(gb);
+                return 20;
+            }
+
+            return 8;
+        case 0x09: // RET
+            ret(gb);
+            return 16;
+        case 0x0A: // JP Z, nn
+            if (gb->reg.f & ZERO_FLAG) {
+                gb->reg.pc = next_u16(gb);
+            }
+
+            return 12;
+        case 0x0B: // Prefix byte
+            return execute_cb_prefixed_opcode(gb);
         }
         break;
     case 0xD0:
@@ -731,6 +753,183 @@ u8 execute(GameBoy* gb) {
 
         }
         break;
+    }
+
+    return 0;
+}
+
+u8 execute_cb_prefixed_opcode(GameBoy* gb) {
+    u8 opcode = next_u8(gb);
+
+    switch (opcode) {
+    case 0x00: // RLC B
+        rotate_left_carry(gb, &gb->reg.b);
+        return 8;
+    case 0x01: // RLC C
+        rotate_left_carry(gb, &gb->reg.c);
+        return 8;
+    case 0x02: // RLC D
+        rotate_left_carry(gb, &gb->reg.d);
+        return 8;
+    case 0x03: // RLC E
+        rotate_left_carry(gb, &gb->reg.e);
+        return 8;
+    case 0x04: // RLC H
+        rotate_left_carry(gb, &gb->reg.h);
+        return 8;
+    case 0x05: // RLC L
+        rotate_left_carry(gb, &gb->reg.l);
+        return 8;
+    case 0x06: // RLC (HL)
+        rotate_left_carry(gb, &gb->mem[gb->reg.hl]);
+        return 16;
+    case 0x07: // RLC A
+        rotate_left_carry(gb, &gb->reg.a);
+        return 8;
+    case 0x08: // RRC B
+        rotate_right_carry(gb, &gb->reg.b);
+        return 8;
+    case 0x09: // RRC C
+        rotate_right_carry(gb, &gb->reg.c);
+        return 8;
+    case 0x0A: // RRC D
+        rotate_right_carry(gb, &gb->reg.d);
+        return 8;
+    case 0x0B: // RRC E
+        rotate_right_carry(gb, &gb->reg.e);
+        return 8;
+    case 0x0C: // RRC H
+        rotate_right_carry(gb, &gb->reg.h);
+        return 8;
+    case 0x0D: // RRC L
+        rotate_right_carry(gb, &gb->reg.l);
+        return 8;
+    case 0x0E: // RRC (HL)
+        rotate_right_carry(gb, &gb->mem[gb->reg.hl]);
+        return 16;
+    case 0x0F: // RRC A
+        rotate_right_carry(gb, &gb->reg.a);
+        return 8;
+    case 0x10: // RL B
+        rotate_left(gb, &gb->reg.b);
+        return 8;
+    case 0x11: // RL C
+        rotate_left(gb, &gb->reg.c);
+        return 8;
+    case 0x12: // RL D
+        rotate_left(gb, &gb->reg.d);
+        return 8;
+    case 0x13: // RL E
+        rotate_left(gb, &gb->reg.e);
+        return 8;
+    case 0x14: // RL H
+        rotate_left(gb, &gb->reg.h);
+        return 8;
+    case 0x15: // RL L
+        rotate_left(gb, &gb->reg.l);
+        return 8;
+    case 0x16: // RL (HL)
+        rotate_left(gb, &gb->mem[gb->reg.hl]);
+        return 16;
+    case 0x17: // RL A
+        rotate_left(gb, &gb->reg.a);
+        return 8;
+    case 0x18: // RR B
+        rotate_right(gb, &gb->reg.b);
+        return 8;
+    case 0x19: // RR C
+        rotate_right(gb, &gb->reg.c);
+        return 8;
+    case 0x1A: // RR D
+        rotate_right(gb, &gb->reg.d);
+        return 8;
+    case 0x1B: // RR E
+        rotate_right(gb, &gb->reg.e);
+        return 8;
+    case 0x1C: // RR H
+        rotate_right(gb, &gb->reg.h);
+        return 8;
+    case 0x1D: // RR L
+        rotate_right(gb, &gb->reg.l);
+        return 8;
+    case 0x1F: // RR (HL)
+        rotate_right(gb, &gb->mem[gb->reg.hl]);
+        return 16;
+    case 0x20: // SLA B
+        shift_left_carry(gb, &gb->reg.b);
+        return 8;
+    case 0x21: // SLA C
+        shift_left_carry(gb, &gb->reg.c);
+        return 8;
+    case 0x22: // SLA D
+        shift_left_carry(gb, &gb->reg.d);
+        return 8;
+    case 0x23: // SLA E
+        shift_left_carry(gb, &gb->reg.e);
+        return 8;
+    case 0x24: // SLA H
+        shift_left_carry(gb, &gb->reg.h);
+        return 8;
+    case 0x25: // SLA L
+        shift_left_carry(gb, &gb->reg.l);
+        return 8;
+    case 0x26: // SLA (HL)
+        shift_left_carry(gb, &gb->mem[gb->reg.hl]);
+        return 16;
+    case 0x27: // SLA A
+        shift_left_carry(gb, &gb->reg.a);
+        return 8;
+    case 0x28: // SRA B
+        shift_right_carry_signed(gb, &gb->reg.b);
+        return 8;
+    case 0x29: // SRA C
+        shift_right_carry_signed(gb, &gb->reg.c);
+        return 8;
+    case 0x2A: // SRA D
+        shift_right_carry_signed(gb, &gb->reg.d);
+        return 8;
+    case 0x2B: // SRA E
+        shift_right_carry_signed(gb, &gb->reg.e);
+        return 8;
+    case 0x2C: // SRA H
+        shift_right_carry_signed(gb, &gb->reg.h);
+        return 8;
+    case 0x2D: // SRA L
+        shift_right_carry_signed(gb, &gb->reg.l);
+        return 8;
+    case 0x2E: // SRA (HL)
+        shift_right_carry_signed(gb, &gb->mem[gb->reg.hl]);
+        return 16;
+    case 0x2F: // SRA A
+        shift_right_carry_signed(gb, &gb->reg.a);
+        return 8;
+    case 0x30: // SWAP B
+        swap(gb, &gb->reg.b);
+        return 8;
+    case 0x31: // SWAP C
+        swap(gb, &gb->reg.c);
+        return 8;
+    case 0x32: // SWAP D
+        swap(gb, &gb->reg.d);
+        return 8;
+    case 0x33: // SWAP E
+        swap(gb, &gb->reg.e);
+        return 8;
+    case 0x34: // SWAP H
+        swap(gb, &gb->reg.h);
+        return 8;
+    case 0x35: // SWAP L
+        swap(gb, &gb->reg.l);
+        return 8;
+    case 0x36: // SWAP (HL)
+        swap(gb, &gb->mem[gb->reg.hl]);
+        return 16;
+    case 0x37: // SWAP A
+        swap(gb, &gb->reg.a);
+        return 8;
+    case 0x38: // SRL B
+        
+        return 8;
     }
 
     return 0;

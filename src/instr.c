@@ -78,11 +78,10 @@ void complement(GameBoy* gb, u8* dest) {
 }
 
 void rotate_left(GameBoy* gb, u8* dest) {
-    gb->reg.f = 0;
-
     u8 old_carry = (gb->reg.f & CARRY_FLAG) > 0;
     u8 new_carry = *dest >> 7;
 
+    gb->reg.f = 0;
     gb->reg.f |= CARRY_FLAG * new_carry;
 
     *dest = (*dest << 1) | old_carry;
@@ -102,11 +101,10 @@ void rotate_left_carry(GameBoy* gb, u8* dest) {
 }
 
 void rotate_right(GameBoy* gb, u8* dest) {
-    gb->reg.f = 0;
-
     u8 old_carry = (gb->reg.f & CARRY_FLAG) > 0;
     u8 new_carry = *dest & 1;
 
+    gb->reg.f = 0;
     gb->reg.f |= CARRY_FLAG * new_carry;
 
     *dest = (old_carry << 7) | (*dest >> 1);
@@ -121,6 +119,41 @@ void rotate_right_carry(GameBoy* gb, u8* dest) {
     gb->reg.f |= CARRY_FLAG * carry;
 
     *dest = (carry << 7) | (*dest >> 1);
+
+    zero_check(gb, *dest);
+}
+
+void shift_left_carry(GameBoy* gb, u8* dest) {
+    u8 carry = *dest >> 7;
+
+    gb->reg.f = 0;
+    gb->reg.f |= CARRY_FLAG * carry;
+
+    *dest <<= 1;
+
+    zero_check(gb, *dest);
+}
+
+void shift_right_carry(GameBoy* gb, u8* dest) {
+    u8 carry = *dest & 1;
+
+    gb->reg.f = 0;
+    gb->reg.f |= CARRY_FLAG * carry;
+
+    *dest >>= 1;
+
+    zero_check(gb, *dest);
+}
+
+void shift_right_carry_signed(GameBoy* gb, u8* dest) {
+    u8 msb = *dest & (1 << 7);
+    u8 carry = *dest & 1;
+
+    gb->reg.f = 0;
+    gb->reg.f |= CARRY_FLAG * carry;
+
+    *dest >>= 1;
+    *dest |= msb;
 
     zero_check(gb, *dest);
 }
@@ -189,6 +222,17 @@ void push_u16(GameBoy* gb, u16 val) {
     gb->reg.sp -= 2;
 }
 
+void swap(GameBoy* gb, u8* dest) {
+    gb->reg.f = 0;
+
+    u8 lower_nibbles = *dest & 0x0F;
+    u8 upper_nibbles = *dest & 0xF0;
+
+    *dest = (lower_nibbles << 4) | (upper_nibbles >> 4);
+
+    zero_check(gb, *dest);
+}
+
 void ret(GameBoy* gb) {
     u16 addr;
     pop_u16(gb, &addr);
@@ -199,4 +243,8 @@ void ret(GameBoy* gb) {
 void call(GameBoy* gb, u16 addr) {
     push_u16(gb, gb->reg.pc); // Here, `pc` is pointing to the next instruction because it is incremented inside `execute`
     gb->reg.pc = addr;
+}
+
+void restart(GameBoy* gb, u8 offset) {
+    call(gb, offset);
 }

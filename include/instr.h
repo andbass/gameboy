@@ -41,6 +41,15 @@ void rotate_right(GameBoy*, u8* dest);
 // Handles RRC, RRCA
 void rotate_right_carry(GameBoy*, u8* dest);
 
+// Handles SLA
+void shift_left_carry(GameBoy*, u8* dest);
+
+// Handles SRA
+void shift_right_carry_signed(GameBoy*, u8* dest);
+
+// Handles SRL
+void shift_right_carry(GameBoy* gb, u8* dest);
+
 // Handles JR and company
 void relative_jump(GameBoy*, i8 offset);
 
@@ -65,8 +74,14 @@ void pop_u16(GameBoy*, u16* dest);
 // Handles PUSH
 void push_u16(GameBoy*, u16 val);
 
+// Handles SWAP
+void swap(GameBoy*, u8* dest);
+
 // Handles RET
 void ret(GameBoy*);
 
 // Handles CALL
 void call(GameBoy*, u16 addr);
+
+// Handles RST
+void restart(GameBoy*, u8 offset);
