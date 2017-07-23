@@ -77,11 +77,14 @@ void push_u16(GameBoy*, u16 val);
 // Handles SWAP
 void swap(GameBoy*, u8* dest);
 
-// Handles RET
-void ret(GameBoy*);
+// Handles BIT
+void test_bit(GameBoy*, u8* dest, u8 bit);
 
 // Handles CALL
 void call(GameBoy*, u16 addr);
+
+// Handles RET
+void ret(GameBoy*);
 
 // Handles RST
 void restart(GameBoy*, u8 offset);

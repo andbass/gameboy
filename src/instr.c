@@ -5,10 +5,10 @@
 static bool zero_check(GameBoy* gb, u8 value) {
     if (value == 0) {
         gb->reg.f |= ZERO_FLAG;
-
         return true;
     }
 
+    gb->reg.f &= ~ZERO_FLAG;
     return false;
 }
 
@@ -233,15 +233,23 @@ void swap(GameBoy* gb, u8* dest) {
     zero_check(gb, *dest);
 }
 
-void ret(GameBoy* gb) {
-    u16 addr;
-    pop_u16(gb, &addr);
+void test_bit(GameBoy*, u8* dest, u8 bit) {
+    gb->reg.f |= HALF_CARRY;
+    gb->reg.f &= ~SUBTRACT_FLAG;
 
-    gb->reg.pc = addr;
+    u8 mask = 1 << bit;
+    zero_check(gb, mask);
 }
 
 void call(GameBoy* gb, u16 addr) {
     push_u16(gb, gb->reg.pc); // Here, `pc` is pointing to the next instruction because it is incremented inside `execute`
+    gb->reg.pc = addr;
+}
+
+void ret(GameBoy* gb) {
+    u16 addr;
+    pop_u16(gb, &addr);
+
     gb->reg.pc = addr;
 }
 
