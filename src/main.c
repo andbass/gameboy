@@ -22,5 +22,7 @@ int main(int argc, char** argv) {
 
     cpu_info(&gb, stdout);
 
+    printf("HAHAH: %#x\n", gb.io_reg - gb.mem);
+
     return 0;
 }

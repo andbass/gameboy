@@ -16,7 +16,7 @@ typedef struct {
             u8 rom_bankN    [0x7FFF - 0x4000 + 1];
 
             u8 vram         [0x9FFF - 0x8000 + 1];
-            u8 external_ram [0xBFFF - 0x8000 + 1];
+            u8 external_ram [0xBFFF - 0xA000 + 1];
 
             u8 wram0        [0xCFFF - 0xC000 + 1];
             u8 wramN        [0xDFFF - 0xD000 + 1];
@@ -27,7 +27,7 @@ typedef struct {
 
             u8 io_reg       [0xFF7F - 0xFF00 + 1];
             u8 hram         [0xFFFE - 0xFF80 + 1];
-            u8 interrupt_flags;
+            u8 interrupt_enable_flags;
         };
 
         u8 mem[0xFFFF + 1];
