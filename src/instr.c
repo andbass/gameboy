@@ -13,15 +13,27 @@ static bool zero_check(GameBoy* gb, u8 value) {
 }
 
 static bool carry_u8_check(GameBoy* gb, u8 op1, u8 op2) {
+    u16 sum = (u16)op1 + (u16)op2;
+    if (sum > 0xFF) {
+        gb->reg |= CARRY_FLAG;
+        return true;
+    }
+
     return false;
 }
 
-static bool carry_u16_check(GameBoy* gb, u8 op1, u8 op2) {
+static bool carry_u16_check(GameBoy* gb, u16 op1, u16 op2) {
+    u32 sum = (u32)op1 + (u32)op2;
+    if (sum > 0xFFFF) {
+        gb->reg |= CARRY_FLAG;
+        return true;
+    }
+
     return false;
 }
 
 static bool half_carry_u8_check(GameBoy* gb, u8 op1, u8 op2) {
-    if (((op1 & 0x0F) + (op2 & 0x0F)) >= 0x10) {
+    if (((op1 & 0x0F) + (op2 & 0x0F)) > 0x0F) {
         gb->reg.f |= HALF_CARRY_FLAG;
         return true;
     }
@@ -30,7 +42,7 @@ static bool half_carry_u8_check(GameBoy* gb, u8 op1, u8 op2) {
 }
 
 static bool half_carry_u16_check(GameBoy* gb, u16 op1, u16 op2) {
-    if (((op1 & 0x0F) + (op2 & 0x0F)) >= 0x10) {
+    if (((op1 & 0xFFF) + (op2 & 0xFFF)) > 0xFFF) {
         gb->reg.f |= HALF_CARRY_FLAG;
         return true;
     }
@@ -40,7 +52,7 @@ static bool half_carry_u16_check(GameBoy* gb, u16 op1, u16 op2) {
 
 void add_u8(GameBoy* gb, u8* dest, u8 val) {
     gb->reg.f = 0;
-    gb->reg.a += val;
+    *dest += val;
 
     zero_check(gb, *dest);
     half_carry_u8_check(gb, *dest, val);
