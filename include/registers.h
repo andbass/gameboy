@@ -15,32 +15,32 @@ typedef struct {
     union {
         u16 af;
         struct {
-            u8 a;
             u8 f;
+            u8 a;
         };
     };
 
     union {
         u16 bc;
         struct {
-            u8 b;
             u8 c;
+            u8 b;
         };
     };
 
     union {
         u16 de;
         struct {
-            u8 d;
             u8 e;
+            u8 d;
         };
     };
 
     union {
         u16 hl;
         struct {
-            u8 h;
             u8 l;
+            u8 h;
         };
     };
 
