@@ -751,21 +751,160 @@ u8 execute(GameBoy* gb) {
         case 0x0D: // CALL nn
             call(gb, next_u16(gb));
             return 24;
+        case 0x0E: // ADC A, n
+            add_with_carry_u8(gb, &gb->reg.a, next_u8(gb));
+            return 8;
+        case 0x0F: // RST 0x08
+            call(gb, 0x08);
+            return 16;
         }
         break;
     case 0xD0:
         switch (opcode & 0x0F) {
+        case 0x00: // RET NC
+            if (!(gb->reg.f & CARRY_FLAG)) {
+                ret(gb);
+                return 20;
+            }
 
+            return 8;
+        case 0x01: // POP DE
+            pop_u16(gb, &gb->reg.de);
+            return 12;
+        case 0x02: // JP NC, nn
+            if (!(gb->reg.f & CARRY_FLAG)) {
+                gb->reg.pc = next_u16(gb);
+                return 16; 
+            }
+
+            return 12;
+        case 0x04: // CALL NC, nn
+            if (!(gb->reg.f & CARRY_FLAG)) {
+                call(gb, next_u16(gb));
+                return 24;
+            }
+
+            return 12;
+        case 0x05: // PUSH DE
+            push_u16(gb, gb->reg.de);
+            return 16;
+        case 0x06: // SUB n
+            sub_u8(gb, &gb->reg.a, next_u8(gb));
+            return 8;
+        case 0x07: // RST 0x10
+            call(gb, 0x10);
+            return 16;
+        case 0x08: // RET C
+            if (gb->reg.f & CARRY_FLAG) {
+                ret(gb);
+                return 20;
+            }
+
+            return 8;
+        case 0x09: // RETI
+            ret(gb);
+            gb->interrupt_master_enable = true;
+            return 16;
+        case 0x0A: // JP C, nn
+            if (gb->reg.f & CARRY_FLAG) {
+                gb->reg.pc = next_u16(gb);
+                return 16;
+            }
+
+            return 12;
+        case 0x0C: // CALL C, nn
+            if (gb->reg.f & CARRY_FLAG) {
+                call(gb, next_u16(gb)); 
+                return 24;
+            }
+
+            return 12;
+        case 0x0E: // SBC A, n
+            sub_with_carry_u8(gb, &gb->reg.a, next_u8(gb));
+            return 8;
+        case 0x0F: // RST 0x18
+            call(gb, 0x18);
+            return 16;
         }
         break;
     case 0xE0:
         switch (opcode & 0x0F) {
-
+        case 0x00: // LDH (n), A
+            gb->mem[0xFF00 + next_u8(gb)] = gb->reg.a; 
+            return 12;
+        case 0x01: // POP HL
+            pop_u16(gb, &gb->reg.hl);
+            return 12;
+        case 0x02: // LD (C), A
+            gb->mem[0xFF00 + gb->reg.c] = gb->reg.a;
+            return 8;
+        case 0x05: // PUSH HL
+            push_u16(gb, gb->reg.hl);
+            return 16;
+        case 0x06: // AND n
+            and_u8(gb, &gb->reg.a, next_u8(gb));
+            return 8;
+        case 0x07: // RST 0x20
+            call(gb, 0x20);
+            return 16;
+        case 0x08: // ADD SP, s
+            gb->reg.sp += (i8)next_u8(gb);
+            return 16;
+        case 0x09: // JP (HL)
+            gb->reg.pc = gb->reg.hl;
+            return 4;
+        case 0x0A: // LD (nn), A
+            gb->mem[next_u16(gb)] = gb->reg.a;
+            return 16;
+        case 0x0E: // XOR n
+            xor_u8(gb, &gb->reg.a, next_u8(gb));
+            return 8;
+        case 0x0F: // RST 0x28
+            call(gb, 0x28);
+            return 16;
         }
         break;
     case 0xF0:
         switch (opcode & 0x0F) {
-
+        case 0x00: // LDH A, (n)
+            gb->reg.a = gb->mem[0xFF00 + next_u8(gb)];
+            return 12;
+        case 0x01: // POP AF
+            pop_u16(gb, &gb->reg.af);
+            return 12;
+        case 0x02: // LD A, (C)
+            gb->reg.a = gb->mem[0xFF00 + gb->reg.c];
+            return 8;
+        case 0x03: // DI
+            gb->interrupt_master_enable = false;
+            return 4;
+        case 0x05: // PUSH AF
+            push_u16(gb, gb->reg.af);
+            return 16;
+        case 0x06: // OR n
+            or_u8(gb, &gb->reg.a, next_u8(gb));
+            return 8;
+        case 0x07: // RST 0x30
+            call(gb, 0x30);
+            return 16;
+        case 0x08: // LD HL, SP + s
+            gb->reg.hl = gb->reg.sp + (i16)next_u8(gb);
+            return 12;
+        case 0x09: // LD SP, HL
+            gb->reg.sp = gb->reg.hl;
+            return 8;
+        case 0x0A: // LD A, (nn)
+            gb->reg.a = gb->mem[next_u16(gb)];
+            return 16;
+        case 0x0B: // EI
+            gb->interrupt_master_enable = true;
+            return 4;
+        case 0x0E: // CP n
+            compare_u8(gb, gb->reg.a, next_u8(gb));
+            return 8;
+        case 0x0F: // RST 0x38
+            call(gb, 0x38);
+            return 16;
         }
         break;
     }

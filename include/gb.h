@@ -27,11 +27,12 @@ typedef struct {
 
             u8 io_reg       [0xFF7F - 0xFF00 + 1];
             u8 hram         [0xFFFE - 0xFF80 + 1];
-            u8 interrupt_enable;
+            u8 interrupt_flags;
         };
 
         u8 mem[0xFFFF + 1];
     };
+    bool interrupt_master_enable;
     Registers reg;
     Mode mode;
 } GameBoy;

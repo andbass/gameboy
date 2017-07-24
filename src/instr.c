@@ -47,6 +47,11 @@ void add_u8(GameBoy* gb, u8* dest, u8 val) {
     carry_u8_check(gb, *dest, val);
 }
 
+void add_with_carry_u8(GameBoy* gb, u8* dest, u8 val) {
+    u8 carry = (gb->reg.f & CARRY_FLAG) > 0;
+    add_u8(gb, dest, val + carry);
+}
+
 void sub_u8(GameBoy* gb, u8* dest, u8 val) {
     gb->reg.f = 0;
     gb->reg.f |= SUBTRACT_FLAG;
@@ -56,14 +61,13 @@ void sub_u8(GameBoy* gb, u8* dest, u8 val) {
     zero_check(gb, *dest);
 }
 
-void add_with_carry_u8(GameBoy* gb, u8* dest, u8 val) {
-    u8 carry = (gb->reg.f & CARRY_FLAG) > 0;
-    add_u8(gb, dest, val + carry);
-}
-
 void sub_with_carry_u8(GameBoy* gb, u8* dest, u8 val) {
     u8 carry = (gb->reg.f & CARRY_FLAG) > 0;
     sub_u8(gb, dest, val - carry);
+}
+
+void compare_u8(GameBoy* gb, u8 val1, u8 val2) {
+    sub_u8(gb, &val1, val2);
 }
 
 void add_u16(GameBoy* gb, u16* dest, u16 val) {

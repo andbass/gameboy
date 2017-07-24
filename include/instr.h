@@ -11,17 +11,20 @@
 // Handles INC and ADD
 void add_u8(GameBoy*, u8* dest, u8 val);
 
+// Handles ADC
+void add_with_carry_u8(GameBoy*, u8* dest, u8 val);
+
 // Handles SUB
 void sub_u8(GameBoy*, u8* dest, u8 val);
 
 // Handles SBC
 void sub_with_carry_u8(GameBoy*, u8* dest, u8 val);
 
+// Handles CP
+void compare_u8(GameBoy*, u8 val1, u8 val2);
+
 // Handles ADD with 16 bit registers
 void add_u16(GameBoy*, u16* dest, u16 val);
-
-// Handles ADC
-void add_with_carry_u8(GameBoy*, u8* dest, u8 val);
 
 // Handles SUB with 16 bit registers
 void sub_u16(GameBoy*, u16* dest, u16 val);

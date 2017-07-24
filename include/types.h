@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stdbool.h>
 #include <inttypes.h>
 
 typedef uint8_t  u8;
