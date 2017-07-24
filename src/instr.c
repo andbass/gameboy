@@ -15,7 +15,7 @@ static bool zero_check(GameBoy* gb, u8 value) {
 static bool carry_u8_check(GameBoy* gb, u8 op1, u8 op2) {
     u16 sum = (u16)op1 + (u16)op2;
     if (sum > 0xFF) {
-        gb->reg |= CARRY_FLAG;
+        gb->reg.f |= CARRY_FLAG;
         return true;
     }
 
@@ -25,7 +25,7 @@ static bool carry_u8_check(GameBoy* gb, u8 op1, u8 op2) {
 static bool carry_u16_check(GameBoy* gb, u16 op1, u16 op2) {
     u32 sum = (u32)op1 + (u32)op2;
     if (sum > 0xFFFF) {
-        gb->reg |= CARRY_FLAG;
+        gb->reg.f |= CARRY_FLAG;
         return true;
     }
 
@@ -84,10 +84,20 @@ void compare_u8(GameBoy* gb, u8 val1, u8 val2) {
 
 void add_u16(GameBoy* gb, u16* dest, u16 val) {
     gb->reg.f &= ~SUBTRACT_FLAG;
+
+    *dest += val;
+
+    zero_check(gb, *dest);
+    half_carry_u16_check(gb, *dest, val);
+    carry_u16_check(gb, *dest, val);
 }
 
 void sub_u16(GameBoy* gb, u16* dest, u16 val) {
     gb->reg.f |= SUBTRACT_FLAG;
+
+    *dest -= val;
+
+    zero_check(gb, *dest);
 }
 
 void complement(GameBoy* gb, u8* dest) {
