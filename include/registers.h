@@ -5,10 +5,12 @@
 
 #include "types.h"
 
-#define ZERO_FLAG (1 << 7)
-#define SUBTRACT_FLAG (1 << 6)
-#define HALF_CARRY_FLAG (1 << 5)
-#define CARRY_FLAG (1 << 4)
+typedef enum {
+    ZERO_FLAG = 1 << 7,
+    SUBTRACT_FLAG = 1 << 6,
+    HALF_CARRY_FLAG = 1 << 5,
+    CARRY_FLAG = 1 << 4,
+} Flag;
 
 // Registers
 typedef struct {
