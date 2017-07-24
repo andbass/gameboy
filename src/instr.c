@@ -71,6 +71,8 @@ void sub_u8(GameBoy* gb, u8* dest, u8 val) {
     *dest -= val;
 
     zero_check(gb, *dest);
+    half_carry_u8_check(gb, *dest, -val);
+    carry_u8_check(gb, *dest, -val);
 }
 
 void sub_with_carry_u8(GameBoy* gb, u8* dest, u8 val) {
@@ -98,6 +100,8 @@ void sub_u16(GameBoy* gb, u16* dest, u16 val) {
     *dest -= val;
 
     zero_check(gb, *dest);
+    half_carry_u16_check(gb, *dest, -val);
+    carry_u16_check(gb, *dest, -val);
 }
 
 void complement(GameBoy* gb, u8* dest) {
