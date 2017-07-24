@@ -46,7 +46,7 @@ u16 next_u16(GameBoy* gb) {
 // n -> next byte
 // s -> next signed byte
 // ss -> next signed 2 byte number
-u8 execute(GameBoy* gb) {
+u8 execute_opcode(GameBoy* gb) {
     u8 opcode = next_u8(gb);
 
     switch (opcode & 0xF0) {

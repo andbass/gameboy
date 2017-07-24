@@ -12,7 +12,7 @@ void cpu_init(GameBoy*);
 void cpu_info(GameBoy*, FILE*);
 
 // Executes a single opcode, returns number of cycles used
-u8 execute(GameBoy*);
+u8 execute_opcode(GameBoy*);
 
 // Executes a opcode that is prefixed by 0xCB, 
 // It is invoked by `execute` when the prefix byte is encountered
