@@ -42,3 +42,4 @@ typedef struct GameBoy {
 } GameBoy;
 
 void gb_init(GameBoy*);
+void gb_cycle(GameBoy*);

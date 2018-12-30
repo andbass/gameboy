@@ -41,6 +41,14 @@ u16 next_u16(GameBoy* gb) {
     return ((u16)hi << 8) | (u16)lo;
 }
 
+void write_u16(GameBoy* gb, u16 addr, u16 value) {
+    u8 lo = value & 0xFF;
+    u8 hi = (value >> 8) & 0xFF;
+
+    gb->mem[addr] = lo;
+    gb->mem[addr + 1] = hi;
+}
+
 // Opcodes come from: http://www.pastraiser.com/cpu/gameboy/gameboy_opcodes.html
 // nn -> next 2 byte number
 // n -> next byte
@@ -76,8 +84,8 @@ u8 execute_opcode(GameBoy* gb) {
             rotate_left_carry(gb, &gb->reg.a);
             return 4;
         case 0x08: // LD (nn), SP
-            gb->mem[next_u8(gb)] = gb->reg.sp;
-            return 4;
+            write_u16(gb, next_u16(gb), gb->reg.sp);
+            return 20;
         case 0x09: // ADD HL, BC
             add_u16(gb, &gb->reg.hl, gb->reg.bc);
             return 8;
@@ -155,13 +163,15 @@ u8 execute_opcode(GameBoy* gb) {
         break;
     case 0x20:
         switch (opcode & 0x0F) {
-        case 0x00: // JR NZ, s
+        case 0x00: { // JR NZ, s
+            u8 addr = next_u8(gb);
             if (!(gb->reg.f & ZERO_FLAG)) {
-                relative_jump(gb, next_u8(gb));
+                relative_jump(gb, addr);
                 return 12;
             }
 
             return 8;
+        }
         case 0x01: // LD HL, nn
             gb->reg.hl = next_u16(gb);
             return 12;
@@ -184,13 +194,15 @@ u8 execute_opcode(GameBoy* gb) {
         case 0x07: // DAA
             decimal_adjust(gb, &gb->reg.a);
             return 4;
-        case 0x08: // JR Z, s
+        case 0x08: { // JR Z, s
+            u8 addr = next_u8(gb);
             if (gb->reg.f & ZERO_FLAG) {
-                relative_jump(gb, next_u8(gb));
+                relative_jump(gb, addr);
                 return 12;
             }
 
             return 8;
+        }
         case 0x09: // ADD HL, HL
             add_u16(gb, &gb->reg.hl, gb->reg.hl);
             return 8;
@@ -216,13 +228,15 @@ u8 execute_opcode(GameBoy* gb) {
         break;
     case 0x30:
         switch (opcode & 0x0F) {
-        case 0x00: // JR NC, r
+        case 0x00: { // JR NC, r
+            u8 addr = next_u8(gb);
             if (!(gb->reg.f & CARRY_FLAG)) {
-                relative_jump(gb, next_u8(gb));
+                relative_jump(gb, addr);
                 return 12;
             }
 
             return 8;
+        }
         case 0x01: // LD (SP), nn
             gb->reg.sp = next_u16(gb);
             return 12;
@@ -245,13 +259,15 @@ u8 execute_opcode(GameBoy* gb) {
         case 0x07: // SCF
             gb->reg.f |= CARRY_FLAG;
             return 0;
-        case 0x08: // JR C, r
+        case 0x08: { // JR C, r
+            u8 addr = next_u8(gb);
             if (gb->reg.f & CARRY_FLAG) {
-                relative_jump(gb, next_u8(gb));
+                relative_jump(gb, addr);
                 return 12;
             }
 
             return 8;
+        }
         case 0x09: // ADD HL, SP
             add_u16(gb, &gb->reg.hl, gb->reg.sp);
             return 8;
@@ -697,13 +713,15 @@ u8 execute_opcode(GameBoy* gb) {
         case 0x01: // POP BC
             pop_u16(gb, &gb->reg.bc);
             return 12;
-        case 0x02: // JP NZ, nn
+        case 0x02: { // JP NZ, nn
+            u16 addr = next_u16(gb);
             if (!(gb->reg.f & ZERO_FLAG)) {
-                gb->reg.pc = next_u16(gb);
+                gb->reg.pc = addr;
                 return 16;
             }
 
             return 12;
+        }
         case 0x03: // JP nn
             gb->reg.pc = next_u16(gb);
             return 16;
@@ -733,12 +751,14 @@ u8 execute_opcode(GameBoy* gb) {
         case 0x09: // RET
             ret(gb);
             return 16;
-        case 0x0A: // JP Z, nn
+        case 0x0A: { // JP Z, nn
+            u16 addr = next_u16(gb);
             if (gb->reg.f & ZERO_FLAG) {
-                gb->reg.pc = next_u16(gb);
+                gb->reg.pc = addr;
             }
 
             return 12;
+        }
         case 0x0B: // Prefix byte
             return execute_cb_prefixed_opcode(gb);
         case 0x0C: // CALL Z, nn
@@ -771,13 +791,15 @@ u8 execute_opcode(GameBoy* gb) {
         case 0x01: // POP DE
             pop_u16(gb, &gb->reg.de);
             return 12;
-        case 0x02: // JP NC, nn
+        case 0x02: { // JP NC, nn
+            u16 addr = next_u16(gb);
             if (!(gb->reg.f & CARRY_FLAG)) {
-                gb->reg.pc = next_u16(gb);
+                gb->reg.pc = addr;
                 return 16; 
             }
 
             return 12;
+        }
         case 0x04: // CALL NC, nn
             if (!(gb->reg.f & CARRY_FLAG)) {
                 call(gb, next_u16(gb));
@@ -805,13 +827,15 @@ u8 execute_opcode(GameBoy* gb) {
             ret(gb);
             gb->interrupt_master_enable = true;
             return 16;
-        case 0x0A: // JP C, nn
+        case 0x0A: { // JP C, nn
+            u16 addr = next_u16(gb);
             if (gb->reg.f & CARRY_FLAG) {
-                gb->reg.pc = next_u16(gb);
+                gb->reg.pc = addr;
                 return 16;
             }
 
             return 12;
+        }
         case 0x0C: // CALL C, nn
             if (gb->reg.f & CARRY_FLAG) {
                 call(gb, next_u16(gb)); 

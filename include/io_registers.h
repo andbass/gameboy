@@ -17,7 +17,7 @@ typedef struct IORegisters {
     u8* divider; // DIV
 
     u8* timer_counter; // TIMA
-    u8* timer_modulo; // TMA: Data this is loaded into TIMA when it overflows
+    u8* timer_modulo; // TMA: Data that is loaded into TIMA when it overflows
     u8* timer_control; // TAC: Controls timer behavior
 
     u8* interrupt_flag; // IF: Tells user which interrupt was requested

@@ -21,8 +21,8 @@ int main(int argc, char** argv) {
     gb_init(&gb);
 
     cpu_info(&gb, stdout);
-
-    printf("HAHAH: %#x\n", gb.io_reg_mem - gb.mem);
+    
+    printf("HAHAH: %#lx\n", gb.io_reg_mem - gb.mem);
 
     return 0;
 }
